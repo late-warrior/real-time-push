@@ -1,0 +1,8 @@
+{
+  "name": "push-server",
+  "version": "0.0.1",
+  "dependencies": {
+    "deepstream.io": "^0.7.1"
+  },
+  "devDependencies": {}
+}

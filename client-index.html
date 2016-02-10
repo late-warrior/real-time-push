@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A basic deepstream.io client</title>
+</head>
+<body>
+    <input type="text" />
+    <div style="background-color: #d9534f">
+        <p id="st"></p>
+    </div>
+    <button id="btn-ch" type="button"> Click to trigger a change and show in the para above</button>
+</body>
+<script
+        type="text/javascript"
+        src="deepstream-client-min.js">
+</script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script>
+    var ds = deepstream( 'localhost:6020' ).login();
+    var record = ds.record.getRecord('random-user');
+    var in$ = document.querySelector('input');
+
+    in$.onkeyup = function() {
+        record.set('firstname', in$.value);
+    }
+
+    record.subscribe('firstname', function(value) {
+        in$.value = value;
+    })
+
+    record.subscribe('error', function(err) {
+        $('#st').html(JSON.stringify(err));
+    })
+
+    $('#btn-ch').click(function() {
+        ds.event.emit('randomize', Math.random());
+    });
+
+    ds.event.subscribe('randomize', function(value) {
+        $('#st').html('Putting a random number - ' + value);
+    });
+
+</script>
+</html>
